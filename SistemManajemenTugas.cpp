@@ -55,7 +55,7 @@ void garis(int p, char c='-') { cout<<"  "; for(int i=0;i<p;i++) cout<<c; cout<<
 struct Tugas {
     int id, prioritas;
     string namaTugas, mataKuliah, deadline, status, tanggalUpdate;
-    Tugas* next; Tugas* prev;  // next: LL tunggal & berkepala-berekor | prev: LL ganda
+    Tugas* next; Tugas* prev; // next: LL tunggal & berkepala-berekor | prev: LL ganda
 };
 
 struct NodeRiwayat {
@@ -65,10 +65,39 @@ struct NodeRiwayat {
 
 // -------------------------------------------------------
 // VARIABEL GLOBAL
-// LL Tunggal
-Tugas* headAktif = NULL;
-int nextId = 1;
+Tugas* headAktif = NULL; int nextId = 1; // LL tunggal
 NodeRiwayat* headRiwayat=NULL,* tailRiwayat=NULL,* cursorRiwayat=NULL; // LL Ganda
+
+// -------------------------------------------------------
+// LINKED LIST TUNGGAL - TUGAS AKTIF
+Tugas* buatNode(int id, const string& nm, const string& mk, const string& dl, int pr) {
+    Tugas* n=new Tugas;
+    n->id=id; n->namaTugas=nm; n->mataKuliah=mk; n->deadline=dl;
+    n->prioritas=pr; n->status="AKTIF"; n->tanggalUpdate=getTanggalHariIni();
+    n->next=NULL; n->prev=NULL;
+    return n;
+}
+
+void insertTugasAktif(Tugas* node) {
+    if (!headAktif) { headAktif=node; return; }
+    Tugas* c=headAktif;
+    while (c->next) c=c->next; // traversal ke node terakhir
+    c->next=node;
+}
+
+Tugas* hapusDariAktif(int id) {
+    Tugas* c=headAktif, *sbl=NULL;
+    while (c) {
+        if (c->id==id) {
+            if (!sbl) headAktif=c->next; else sbl->next=c->next;
+            c->next=NULL; return c;
+        }
+        sbl=c; c=c->next;
+    }
+    return NULL;
+}
+
+int hitungAktif() { int n=0; Tugas* c=headAktif; while(c){n++;c=c->next;} return n; }
 
 // -------------------------------------------------------
 // MAIN
