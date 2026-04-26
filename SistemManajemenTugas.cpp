@@ -58,11 +58,17 @@ struct Tugas {
     Tugas* next; Tugas* prev;  // next: LL tunggal & berkepala-berekor | prev: LL ganda
 };
 
+struct NodeRiwayat {
+    Tugas data; string aksi;   // TAMBAH | EDIT | SELESAI | BATAL | TERLAMBAT
+    NodeRiwayat* next; NodeRiwayat* prev;
+};
+
 // -------------------------------------------------------
 // VARIABEL GLOBAL
 // LL Tunggal
 Tugas* headAktif = NULL;
 int nextId = 1;
+NodeRiwayat* headRiwayat=NULL,* tailRiwayat=NULL,* cursorRiwayat=NULL; // LL Ganda
 
 // -------------------------------------------------------
 // MAIN
