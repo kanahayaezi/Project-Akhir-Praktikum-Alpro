@@ -51,6 +51,20 @@ string prioritasStr(int p) { return p==1?"Tinggi":p==2?"Sedang":"Rendah"; }
 void garis(int p, char c='-') { cout<<"  "; for(int i=0;i<p;i++) cout<<c; cout<<"\n"; }
 
 // -------------------------------------------------------
+// STRUCT
+struct Tugas {
+    int id, prioritas;
+    string namaTugas, mataKuliah, deadline, status, tanggalUpdate;
+    Tugas* next; Tugas* prev;  // next: LL tunggal & berkepala-berekor | prev: LL ganda
+};
+
+// -------------------------------------------------------
+// VARIABEL GLOBAL
+// LL Tunggal
+Tugas* headAktif = NULL;
+int nextId = 1;
+
+// -------------------------------------------------------
 // MAIN
 int main() {
     cout << "Sistem Manajemen Tugas Kuliah" << endl;
