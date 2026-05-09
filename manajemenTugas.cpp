@@ -219,6 +219,23 @@ void tampilMenu() {
     cout << "Pilihan [0-7]: ";
 }
 
+int kosongList() {
+    return (head == NULL) ? 1 : 0;
+}
+
+NodePtr cariID(int idCari) {
+    NodePtr bantu = head;
+
+    while (bantu != NULL) {
+        if (bantu->data.id == idCari) {
+            return bantu;
+        }
+        bantu = bantu->next;
+    }
+
+    return NULL;
+}
+
 int main() {
     cout << "Program Manajemen Tugas Kuliah" << endl;
     return 0;
