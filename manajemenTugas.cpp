@@ -23,6 +23,9 @@ typedef struct Node {
 NodePtr head = NULL;
 int idCounter = 1;
 
+void bersihLayar() { system("cls"); }
+void jedaLayar() { system("pause"); }
+
 int main() {
     cout << "Program Manajemen Tugas Kuliah" << endl;
     return 0;
