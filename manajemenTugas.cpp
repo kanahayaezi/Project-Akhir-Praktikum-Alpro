@@ -115,6 +115,42 @@ void inputTeks(const char *label, char hasil[], int batas) {
     }
 }
 
+void inputDeadline(char dl[]) {
+    cout << "Deadline (DD/MM/YYYY) : ";
+    cin.getline(dl, 11);
+
+    while (!validDeadline(dl)) {
+        cout << "[!] Format tidak valid. Gunakan DD/MM/YYYY, contoh: 25/06/2025." << endl;
+        cout << "    Hari 01-31, Bulan 01-12, Tahun 2000-2099." << endl;
+        cout << "Deadline (DD/MM/YYYY) : ";
+        cin.getline(dl, 11);
+    }
+}
+
+int inputPilihan() {
+    int pilihan;
+
+    cin >> pilihan;
+
+    if (cin.fail()) {
+        cin.clear();
+        cin.ignore(100, '\n');
+        cout << "[!] Pilihan harus berupa angka." << endl;
+        jedaLayar();
+        return -1;
+    }
+
+    cin.ignore();
+
+    if (pilihan < 0 || pilihan > 7) {
+        cout << "[!] Pilihan tidak valid. Masukkan angka 0-7." << endl;
+        jedaLayar();
+        return -1;
+    }
+
+    return pilihan;
+}
+
 int main() {
     cout << "Program Manajemen Tugas Kuliah" << endl;
     return 0;
