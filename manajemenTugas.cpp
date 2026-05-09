@@ -151,6 +151,74 @@ int inputPilihan() {
     return pilihan;
 }
 
+void garis() {
+    printf("+----+------------------------------+----------------------------------------+------------+----------+\n");
+}
+
+void headerTabel() {
+    garis();
+    printf("| %-2s | %-28s | %-38s | %-10s | %-8s |\n",
+           "ID", "Mata Kuliah", "Judul Tugas", "Deadline", "Status");
+    garis();
+}
+
+void barisTabel(NodePtr p) {
+    printf("| %-2d | %-28s | %-38s | %-10s | %-8s |\n",
+           p->data.id,
+           p->data.matakuliah,
+           p->data.judul,
+           p->data.deadline,
+           (p->data.selesai == 1) ? "Selesai" : "Aktif");
+}
+
+void cetakTugas() {
+    if (head == NULL) {
+        cout << "Daftar tugas masih kosong." << endl;
+        return;
+    }
+
+    int total = 0, selesai = 0;
+    NodePtr bantu = head;
+
+    while (bantu != NULL) {
+        total++;
+        if (bantu->data.selesai == 1) selesai++;
+        bantu = bantu->next;
+    }
+
+    cout << "Jumlah: " << total << " tugas"
+         << "  |  Selesai: " << selesai
+         << "  |  Aktif: " << total - selesai << endl << endl;
+
+    headerTabel();
+
+    bantu = head;
+    while (bantu != NULL) {
+        barisTabel(bantu);
+        bantu = bantu->next;
+    }
+
+    garis();
+}
+
+void tampilMenu() {
+    bersihLayar();
+    cout << "+-----------------------------+" << endl;
+    cout << "|  MANAJEMEN TUGAS KULIAH     |" << endl;
+    cout << "+-----------------------------+" << endl;
+    cout << "| 1. Lihat Semua Tugas        |" << endl;
+    cout << "| 2. Tambah Tugas             |" << endl;
+    cout << "| 3. Ubah Data Tugas          |" << endl;
+    cout << "| 4. Ubah Status Tugas        |" << endl;
+    cout << "| 5. Hapus Tugas              |" << endl;
+    cout << "| 6. Cari Berdasarkan MK      |" << endl;
+    cout << "| 7. Urutkan Berdasarkan      |" << endl;
+    cout << "|    Deadline                 |" << endl;
+    cout << "| 0. Keluar                   |" << endl;
+    cout << "+-----------------------------+" << endl;
+    cout << "Pilihan [0-7]: ";
+}
+
 int main() {
     cout << "Program Manajemen Tugas Kuliah" << endl;
     return 0;
