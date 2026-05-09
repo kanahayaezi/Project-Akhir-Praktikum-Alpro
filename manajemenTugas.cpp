@@ -51,6 +51,38 @@ int validDeadline(char dl[]) {
     return 1;
 }
 
+int inputAngka(const char *label, int min, int max) {
+    int nilai;
+
+    do {
+        cout << label << ": ";
+        cin >> nilai;
+
+        if (cin.fail()) {
+            cin.clear();
+            cin.ignore(100, '\n');
+
+            cout << "[!] Masukan harus berupa angka." << endl;
+            nilai = min - 1;
+        }
+
+    } while (nilai < min || nilai > max);
+
+    cin.ignore();
+    return nilai;
+}
+
+void inputTeks(const char *label, char hasil[], int batas) {
+    cout << label;
+    cin.getline(hasil, batas);
+
+    while (kosongString(hasil)) {
+        cout << "[!] Data tidak boleh kosong." << endl;
+        cout << label;
+        cin.getline(hasil, batas);
+    }
+}
+
 int main() {
     cout << "Program Manajemen Tugas Kuliah" << endl;
     return 0;
