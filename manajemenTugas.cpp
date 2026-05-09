@@ -236,6 +236,32 @@ NodePtr cariID(int idCari) {
     return NULL;
 }
 
+void tambahTugas(char mk[], char judulTgs[], char dl[]) {
+    NodePtr baru = (Node *) malloc(sizeof(Node));
+
+    if (baru == NULL) {
+        cout << "[!] Gagal mengalokasi memori." << endl;
+        return;
+    }
+
+    baru->data.id = idCounter++;
+    strcpy(baru->data.matakuliah, mk);
+    strcpy(baru->data.judul, judulTgs);
+    strcpy(baru->data.deadline, dl);
+    baru->data.selesai = 0;
+    baru->next = NULL;
+
+    if (kosongList()) {
+        head = baru;
+    } else {
+        NodePtr bantu = head;
+        while (bantu->next != NULL) bantu = bantu->next;
+        bantu->next = baru;
+    }
+
+    cout << endl << "[OK] Tugas berhasil ditambahkan." << endl;
+}
+
 int main() {
     cout << "Program Manajemen Tugas Kuliah" << endl;
     return 0;
