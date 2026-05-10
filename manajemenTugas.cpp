@@ -501,6 +501,60 @@ void menuTambah() {
     jedaLayar();
 }
 
+void menuUbah() {
+    cout << "----- UBAH DATA TUGAS -----" << endl << endl;
+
+    if (kosongList()) {
+        cout << "Daftar tugas masih kosong." << endl;
+        jedaLayar();
+        return;
+    }
+
+    cetakTugas();
+
+    NodePtr target = NULL;
+
+    do {
+        int idInput = inputAngka("ID Tugas yang diubah ", 1, idCounter - 1);
+        target = cariID(idInput);
+
+        if (target == NULL) {
+            cout << "[!] ID tidak ditemukan. Ulangi." << endl;
+        }
+
+    } while (target == NULL);
+
+    cout << endl << "Data saat ini:" << endl;
+    cout << "Mata Kuliah           : " << target->data.matakuliah << endl;
+    cout << "Judul Tugas           : " << target->data.judul << endl;
+    cout << "Deadline              : " << target->data.deadline << endl;
+    cout << endl << "(Biarkan kosong jika tidak ingin diubah)" << endl << endl;
+
+    char mkBaru[30], judulBaru[50], dlBaru[11];
+
+    cout << "Mata Kuliah Baru      : ";
+    cin.getline(mkBaru, 30);
+    if (!kosongString(mkBaru)) strcpy(target->data.matakuliah, mkBaru);
+
+    cout << "Judul Tugas Baru      : ";
+    cin.getline(judulBaru, 50);
+    if (!kosongString(judulBaru)) strcpy(target->data.judul, judulBaru);
+
+    cout << "Deadline Baru         : ";
+    cin.getline(dlBaru, 11);
+
+    while (!kosongString(dlBaru) && !validDeadline(dlBaru)) {
+        cout << "[!] Format tidak valid. Gunakan DD/MM/YYYY atau kosongkan." << endl;
+        cout << "Deadline Baru         : ";
+        cin.getline(dlBaru, 11);
+    }
+
+    if (!kosongString(dlBaru)) strcpy(target->data.deadline, dlBaru);
+
+    cout << endl << "[OK] Tugas berhasil diperbarui." << endl;
+    jedaLayar();
+}
+
 int main() {
     cout << "Program Manajemen Tugas Kuliah" << endl;
     return 0;
