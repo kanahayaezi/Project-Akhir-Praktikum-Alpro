@@ -332,6 +332,48 @@ void urutDeadline() {
     cout << "[OK] Tugas berhasil diurutkan berdasarkan deadline." << endl << endl;
 }
 
+void cariMK(char keyword[]) {
+    if (kosongList()) {
+        cout << "Daftar tugas masih kosong." << endl;
+        return;
+    }
+
+    int ditemukan = 0;
+    NodePtr bantu = head;
+    char mk_kecil[30], kw_kecil[30];
+    int j;
+
+    strcpy(kw_kecil, keyword);
+    for (j = 0; kw_kecil[j] != '\0'; j++) {
+        if (kw_kecil[j] >= 'A' && kw_kecil[j] <= 'Z') kw_kecil[j] += 32;
+    }
+
+    headerTabel();
+
+    while (bantu != NULL) {
+        strcpy(mk_kecil, bantu->data.matakuliah);
+
+        for (j = 0; mk_kecil[j] != '\0'; j++) {
+            if (mk_kecil[j] >= 'A' && mk_kecil[j] <= 'Z') mk_kecil[j] += 32;
+        }
+
+        if (strstr(mk_kecil, kw_kecil) != NULL) {
+            barisTabel(bantu);
+            ditemukan++;
+        }
+
+        bantu = bantu->next;
+    }
+
+    garis();
+
+    if (ditemukan == 0) {
+        cout << "Tidak ada tugas untuk mata kuliah \"" << keyword << "\"." << endl;
+    } else {
+        cout << "Ditemukan " << ditemukan << " tugas." << endl;
+    }
+}
+
 
 int main() {
     cout << "Program Manajemen Tugas Kuliah" << endl;
