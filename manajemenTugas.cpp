@@ -421,6 +421,67 @@ void simpanFile() {
     cout << "[OK] " << jumlah << " tugas berhasil disimpan." << endl;
 }
 
+void muatFile() {
+    FILE *pf = fopen("tugas_kuliah.dat", "rb");
+
+    if (pf == NULL) {
+        cout << "[i] Berkas data belum ada. Mulai dengan daftar kosong." << endl;
+        return;
+    }
+
+    while (head != NULL) {
+        NodePtr hapus = head;
+        head = head->next;
+        free(hapus);
+    }
+
+    idCounter = 1;
+
+    DataTugas temp;
+    int jumlah = 0, dilewati = 0;
+
+    while (fread(&temp, sizeof(DataTugas), 1, pf) == 1) {
+        if (temp.id <= 0 || kosongString(temp.matakuliah) || !validDeadline(temp.deadline)) {
+            dilewati++;
+            continue;
+        }
+
+        NodePtr baru = (Node *) malloc(sizeof(Node));
+
+        if (baru == NULL) {
+            cout << "[!] Gagal mengalokasi memori." << endl;
+            break;
+        }
+
+        baru->data = temp;
+        baru->next = NULL;
+
+        if (head == NULL) {
+            head = baru;
+        } else {
+            NodePtr bantu = head;
+            while (bantu->next != NULL) bantu = bantu->next;
+            bantu->next = baru;
+        }
+
+        if (temp.id >= idCounter) idCounter = temp.id + 1;
+        jumlah++;
+    }
+
+    fclose(pf);
+
+    if (jumlah == 0 && dilewati == 0) {
+        cout << "[i] Berkas data kosong. Mulai dengan daftar kosong." << endl;
+    } else if (jumlah == 0 && dilewati > 0) {
+        cout << "[!] Berkas data tidak dapat dibaca (kemungkinan rusak)." << endl;
+    } else {
+        cout << "[OK] " << jumlah << " tugas berhasil dimuat." << endl;
+        if (dilewati > 0) {
+            cout << "[!] " << dilewati << " rekaman dilewati karena data tidak valid." << endl;
+        }
+    }
+}
+
 int main() {
     cout << "Program Manajemen Tugas Kuliah" << endl;
     return 0;
