@@ -374,6 +374,26 @@ void cariMK(char keyword[]) {
     }
 }
 
+void ubahStatus(int idCari) {
+    NodePtr bantu = head;
+
+    while (bantu != NULL) {
+        if (bantu->data.id == idCari) {
+            if (bantu->data.selesai == 0) {
+                bantu->data.selesai = 1;
+                cout << endl << "[OK] Tugas \"" << bantu->data.judul << "\" ditandai selesai." << endl;
+            } else {
+                bantu->data.selesai = 0;
+                cout << endl << "[OK] Tugas \"" << bantu->data.judul << "\" diaktifkan kembali." << endl;
+            }
+            return;
+        }
+
+        bantu = bantu->next;
+    }
+
+    cout << endl << "[!] ID tidak ditemukan." << endl;
+}
 
 int main() {
     cout << "Program Manajemen Tugas Kuliah" << endl;
