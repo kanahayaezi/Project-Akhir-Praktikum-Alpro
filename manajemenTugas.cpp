@@ -288,6 +288,50 @@ void hapusTugas(int idCari) {
     }
 }
 
+void urutDeadline() {
+    if (kosongList()) {
+        cout << "Daftar tugas masih kosong." << endl;
+        return;
+    }
+
+    int ada_tukar;
+    NodePtr ptr1, batas = NULL;
+    DataTugas temp;
+
+    do {
+        ada_tukar = 0;
+        ptr1 = head;
+
+        while (ptr1->next != batas) {
+            char *d1 = ptr1->data.deadline;
+            char *d2 = ptr1->next->data.deadline;
+
+            char key1[9], key2[9];
+            key1[0]=d1[6]; key1[1]=d1[7]; key1[2]=d1[8]; key1[3]=d1[9];
+            key1[4]=d1[3]; key1[5]=d1[4]; key1[6]=d1[0]; key1[7]=d1[1];
+            key1[8]='\0';
+
+            key2[0]=d2[6]; key2[1]=d2[7]; key2[2]=d2[8]; key2[3]=d2[9];
+            key2[4]=d2[3]; key2[5]=d2[4]; key2[6]=d2[0]; key2[7]=d2[1];
+            key2[8]='\0';
+
+            if (strcmp(key1, key2) > 0) {
+                temp = ptr1->data;
+                ptr1->data = ptr1->next->data;
+                ptr1->next->data = temp;
+                ada_tukar = 1;
+            }
+
+            ptr1 = ptr1->next;
+        }
+
+        batas = ptr1;
+
+    } while (ada_tukar);
+
+    cout << "[OK] Tugas berhasil diurutkan berdasarkan deadline." << endl << endl;
+}
+
 
 int main() {
     cout << "Program Manajemen Tugas Kuliah" << endl;
