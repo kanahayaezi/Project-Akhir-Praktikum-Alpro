@@ -555,6 +555,46 @@ void menuUbah() {
     jedaLayar();
 }
 
+void menuStatus() {
+    cout << "----- UBAH STATUS TUGAS -----" << endl << endl;
+
+    if (kosongList()) {
+        cout << "Daftar tugas masih kosong." << endl;
+        jedaLayar();
+        return;
+    }
+
+    cetakTugas();
+    cout << "Keterangan: Aktif -> Selesai, atau Selesai -> Aktif kembali." << endl << endl;
+
+    NodePtr target = NULL;
+    int idInput;
+
+    do {
+        idInput = inputAngka("ID Tugas             ", 1, idCounter - 1);
+        target = cariID(idInput);
+
+        if (target == NULL) {
+            cout << "[!] ID tidak ditemukan. Ulangi." << endl;
+        }
+
+    } while (target == NULL);
+
+    cout << endl;
+    cout << "Status saat ini : " << (target->data.selesai == 0 ? "Aktif" : "Selesai") << endl;
+    cout << "Akan diubah ke  : " << (target->data.selesai == 0 ? "Selesai" : "Aktif") << endl << endl;
+
+    char konfirm = inputKonfirm("Yakin ingin mengubah status?");
+
+    if (konfirm == 'y' || konfirm == 'Y') {
+        ubahStatus(idInput);
+    } else {
+        cout << endl << "[i] Perubahan status dibatalkan." << endl;
+    }
+
+    jedaLayar();
+}
+
 int main() {
     cout << "Program Manajemen Tugas Kuliah" << endl;
     return 0;
