@@ -262,6 +262,33 @@ void tambahTugas(char mk[], char judulTgs[], char dl[]) {
     cout << endl << "[OK] Tugas berhasil ditambahkan." << endl;
 }
 
+void hapusTugas(int idCari) {
+    NodePtr hapus, bantu;
+
+    if (head->data.id == idCari) {
+        hapus = head;
+        head  = head->next;
+        free(hapus);
+        cout << endl << "[OK] Tugas berhasil dihapus." << endl;
+        return;
+    }
+
+    bantu = head;
+    while (bantu->next != NULL && bantu->next->data.id != idCari) {
+        bantu = bantu->next;
+    }
+
+    if (bantu->next == NULL) {
+        cout << endl << "[!] ID tidak ditemukan." << endl;
+    } else {
+        hapus       = bantu->next;
+        bantu->next = hapus->next;
+        free(hapus);
+        cout << endl << "[OK] Tugas berhasil dihapus." << endl;
+    }
+}
+
+
 int main() {
     cout << "Program Manajemen Tugas Kuliah" << endl;
     return 0;
