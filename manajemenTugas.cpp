@@ -395,6 +395,32 @@ void ubahStatus(int idCari) {
     cout << endl << "[!] ID tidak ditemukan." << endl;
 }
 
+void simpanFile() {
+    if (kosongList()) {
+        cout << "Tidak ada data untuk disimpan." << endl;
+        return;
+    }
+
+    FILE *pf = fopen("tugas_kuliah.dat", "wb");
+
+    if (pf == NULL) {
+        cout << "[!] Berkas tidak dapat dibuat." << endl;
+        return;
+    }
+
+    int jumlah = 0;
+    NodePtr bantu = head;
+
+    while (bantu != NULL) {
+        fwrite(&bantu->data, sizeof(DataTugas), 1, pf);
+        jumlah++;
+        bantu = bantu->next;
+    }
+
+    fclose(pf);
+    cout << "[OK] " << jumlah << " tugas berhasil disimpan." << endl;
+}
+
 int main() {
     cout << "Program Manajemen Tugas Kuliah" << endl;
     return 0;
