@@ -482,6 +482,25 @@ void muatFile() {
     }
 }
 
+void menuLihat() {
+    cout << "----- DAFTAR SEMUA TUGAS -----" << endl << endl;
+    cetakTugas();
+    jedaLayar();
+}
+
+void menuTambah() {
+    char mk[30], judulTgs[50], dl[11];
+
+    cout << "----- TAMBAH TUGAS BARU -----" << endl << endl;
+
+    inputTeks("Mata Kuliah           : ", mk, 30);
+    inputTeks("Judul Tugas           : ", judulTgs, 50);
+    inputDeadline(dl);
+
+    tambahTugas(mk, judulTgs, dl);
+    jedaLayar();
+}
+
 int main() {
     cout << "Program Manajemen Tugas Kuliah" << endl;
     return 0;
