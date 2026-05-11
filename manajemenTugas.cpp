@@ -595,6 +595,76 @@ void menuStatus() {
     jedaLayar();
 }
 
+void menuHapus() {
+    cout << "----- HAPUS TUGAS -----" << endl << endl;
+
+    if (kosongList()) {
+        cout << "Daftar tugas masih kosong." << endl;
+        jedaLayar();
+        return;
+    }
+
+    cetakTugas();
+
+    NodePtr target = NULL;
+    int idHapus;
+
+    do {
+        idHapus = inputAngka("ID Tugas yang dihapus", 1, idCounter - 1);
+        target = cariID(idHapus);
+
+        if (target == NULL) {
+            cout << "[!] ID tidak ditemukan. Ulangi." << endl;
+        }
+
+    } while (target == NULL);
+
+    cout << endl << "Tugas yang akan dihapus: \"" << target->data.judul << "\"" << endl << endl;
+
+    char konfirm = inputKonfirm("Yakin ingin menghapus?");
+
+    if (konfirm == 'y' || konfirm == 'Y') {
+        hapusTugas(idHapus);
+    } else {
+        cout << endl << "[i] Penghapusan dibatalkan." << endl;
+    }
+
+    jedaLayar();
+}
+
+void menuCari() {
+    cout << "----- CARI TUGAS BERDASARKAN MATA KULIAH -----" << endl << endl;
+
+    if (kosongList()) {
+        cout << "Daftar tugas masih kosong." << endl;
+        jedaLayar();
+        return;
+    }
+
+    char keyword[30];
+
+    inputTeks("Nama Mata Kuliah      : ", keyword, 30);
+
+    cout << endl;
+    cariMK(keyword);
+    jedaLayar();
+}
+
+void menuUrut() {
+    cout << "----- URUTKAN BERDASARKAN DEADLINE -----" << endl << endl;
+
+    urutDeadline();
+    cetakTugas();
+    jedaLayar();
+}
+
+void menuKeluar() {
+    cout << "Menyimpan data..." << endl;
+    simpanFile();
+    cout << endl << "Sampai jumpa!" << endl << endl;
+    jedaLayar();
+}
+
 int main() {
     cout << "Program Manajemen Tugas Kuliah" << endl;
     return 0;
