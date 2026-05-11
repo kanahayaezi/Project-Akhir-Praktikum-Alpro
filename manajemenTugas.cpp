@@ -666,6 +666,32 @@ void menuKeluar() {
 }
 
 int main() {
-    cout << "Program Manajemen Tugas Kuliah" << endl;
+    int pilihan;
+
+    muatFile();
+
+    do {
+        tampilMenu();
+        pilihan = inputPilihan();
+
+        if (pilihan == -1) {
+            continue;
+        }
+
+        bersihLayar();
+
+        switch (pilihan) {
+            case 1: menuLihat(); break;
+            case 2: menuTambah(); break;
+            case 3: menuUbah(); break;
+            case 4: menuStatus(); break;
+            case 5: menuHapus(); break;
+            case 6: menuCari(); break;
+            case 7: menuUrut(); break;
+            case 0: menuKeluar(); break;
+        }
+
+    } while (pilihan != 0);
+
     return 0;
 }
