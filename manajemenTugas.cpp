@@ -4,7 +4,7 @@
 #include <string.h>
 using namespace std;
 
-// struct data tugas
+// struct untuk menyimpan data satu tugas
 struct DataTugas {
     int id;
     char matakuliah[30];
@@ -13,7 +13,7 @@ struct DataTugas {
     int selesai;
 };
 
-// node linked list
+// node untuk linked list singly
 typedef struct Node *NodePtr;
 typedef struct Node {
     DataTugas data;
@@ -26,6 +26,7 @@ int idCounter = 1;
 void bersihLayar() { system("cls"); }
 void jedaLayar() { system("pause"); }
 
+// cek apakah string hanya berisi spasi atau kosong
 int kosongString(char str[]) {
     int i = 0;
     while (str[i] != '\0') {
@@ -35,6 +36,7 @@ int kosongString(char str[]) {
     return 1;
 }
 
+// validasi format deadline DD/MM/YYYY dan rentang nilainya
 int validDeadline(char dl[]) {
     int i;
 
@@ -43,9 +45,7 @@ int validDeadline(char dl[]) {
 
     for (i = 0; i < 10; i++) {
         if (i == 2 || i == 5) continue;
-
-        if (dl[i] < '0' || dl[i] > '9')
-            return 0;
+        if (dl[i] < '0' || dl[i] > '9') return 0;
     }
 
     int dd = (dl[0]-'0')*10 + (dl[1]-'0');
@@ -56,23 +56,25 @@ int validDeadline(char dl[]) {
     if (mm < 1 || mm > 12) return 0;
     if (yy < 2000 || yy > 2099) return 0;
 
+    // batas hari tiap bulan, februari dianggap 29 hari
     int maxHari[13] = {0,31,29,31,30,31,30,31,31,30,31,30,31};
     if (dd > maxHari[mm]) return 0;
 
     return 1;
 }
 
+// input angka dengan validasi tipe dan rentang
 int inputAngka(const char *label, int min, int max) {
     int nilai;
 
     do {
         cout << label << ": ";
+        cin >> nilai;
 
         if (cin.fail()) {
             cin.clear();
             cin.ignore(100, '\n');
-
-            cout << "[!] Masukan harus berupa angka." << endl;
+            cout << "[!] Masukan harus berupa angka. Ulangi." << endl;
             nilai = min - 1;
             continue;
         }
@@ -88,6 +90,7 @@ int inputAngka(const char *label, int min, int max) {
     return nilai;
 }
 
+// input konfirmasi y/t dari pengguna
 char inputKonfirm(const char *pertanyaan) {
     char jawab[10];
 
@@ -104,17 +107,19 @@ char inputKonfirm(const char *pertanyaan) {
     return jawab[0];
 }
 
+// input teks wajib isi, tidak boleh hanya spasi
 void inputTeks(const char *label, char hasil[], int batas) {
     cout << label;
     cin.getline(hasil, batas);
 
     while (kosongString(hasil)) {
-        cout << "[!] Data tidak boleh kosong." << endl;
+        cout << "[!] Data tidak boleh kosong. Ulangi." << endl;
         cout << label;
         cin.getline(hasil, batas);
     }
 }
 
+// input deadline dengan validasi format
 void inputDeadline(char dl[]) {
     cout << "Deadline (DD/MM/YYYY) : ";
     cin.getline(dl, 11);
@@ -127,6 +132,7 @@ void inputDeadline(char dl[]) {
     }
 }
 
+// input pilihan menu 0-7 dengan validasi
 int inputPilihan() {
     int pilihan;
 
@@ -151,10 +157,12 @@ int inputPilihan() {
     return pilihan;
 }
 
+// cetak garis pembatas tabel
 void garis() {
     printf("+----+------------------------------+----------------------------------------+------------+----------+\n");
 }
 
+// cetak header kolom tabel
 void headerTabel() {
     garis();
     printf("| %-2s | %-28s | %-38s | %-10s | %-8s |\n",
@@ -162,6 +170,7 @@ void headerTabel() {
     garis();
 }
 
+// cetak satu baris data tugas ke tabel
 void barisTabel(NodePtr p) {
     printf("| %-2d | %-28s | %-38s | %-10s | %-8s |\n",
            p->data.id,
@@ -171,6 +180,7 @@ void barisTabel(NodePtr p) {
            (p->data.selesai == 1) ? "Selesai" : "Aktif");
 }
 
+// cetak seluruh isi list beserta ringkasan jumlah tugas
 void cetakTugas() {
     if (head == NULL) {
         cout << "Daftar tugas masih kosong." << endl;
@@ -201,6 +211,7 @@ void cetakTugas() {
     garis();
 }
 
+// tampilkan menu utama
 void tampilMenu() {
     bersihLayar();
     cout << "+-----------------------------+" << endl;
@@ -219,10 +230,12 @@ void tampilMenu() {
     cout << "Pilihan [0-7]: ";
 }
 
+// cek apakah list kosong
 int kosongList() {
     return (head == NULL) ? 1 : 0;
 }
 
+// cari node berdasarkan id, kembalikan NULL jika tidak ada
 NodePtr cariID(int idCari) {
     NodePtr bantu = head;
 
@@ -236,6 +249,7 @@ NodePtr cariID(int idCari) {
     return NULL;
 }
 
+// tambah node baru di akhir list
 void tambahTugas(char mk[], char judulTgs[], char dl[]) {
     NodePtr baru = (Node *) malloc(sizeof(Node));
 
@@ -262,9 +276,11 @@ void tambahTugas(char mk[], char judulTgs[], char dl[]) {
     cout << endl << "[OK] Tugas berhasil ditambahkan." << endl;
 }
 
+// hapus node berdasarkan id
 void hapusTugas(int idCari) {
     NodePtr hapus, bantu;
 
+    // kasus hapus node pertama
     if (head->data.id == idCari) {
         hapus = head;
         head  = head->next;
@@ -288,6 +304,8 @@ void hapusTugas(int idCari) {
     }
 }
 
+// urutkan list berdasarkan deadline menggunakan bubble sort
+// deadline dikonversi ke format YYYYMMDD untuk perbandingan string
 void urutDeadline() {
     if (kosongList()) {
         cout << "Daftar tugas masih kosong." << endl;
@@ -306,6 +324,7 @@ void urutDeadline() {
             char *d1 = ptr1->data.deadline;
             char *d2 = ptr1->next->data.deadline;
 
+            // susun ulang karakter dari DD/MM/YYYY menjadi YYYYMMDD
             char key1[9], key2[9];
             key1[0]=d1[6]; key1[1]=d1[7]; key1[2]=d1[8]; key1[3]=d1[9];
             key1[4]=d1[3]; key1[5]=d1[4]; key1[6]=d1[0]; key1[7]=d1[1];
@@ -332,6 +351,7 @@ void urutDeadline() {
     cout << "[OK] Tugas berhasil diurutkan berdasarkan deadline." << endl << endl;
 }
 
+// cari tugas berdasarkan substring nama mata kuliah, case-insensitive
 void cariMK(char keyword[]) {
     if (kosongList()) {
         cout << "Daftar tugas masih kosong." << endl;
@@ -343,6 +363,7 @@ void cariMK(char keyword[]) {
     char mk_kecil[30], kw_kecil[30];
     int j;
 
+    // ubah keyword ke huruf kecil
     strcpy(kw_kecil, keyword);
     for (j = 0; kw_kecil[j] != '\0'; j++) {
         if (kw_kecil[j] >= 'A' && kw_kecil[j] <= 'Z') kw_kecil[j] += 32;
@@ -351,6 +372,7 @@ void cariMK(char keyword[]) {
     headerTabel();
 
     while (bantu != NULL) {
+        // ubah nama mk node ke huruf kecil untuk dibandingkan
         strcpy(mk_kecil, bantu->data.matakuliah);
 
         for (j = 0; mk_kecil[j] != '\0'; j++) {
@@ -374,6 +396,7 @@ void cariMK(char keyword[]) {
     }
 }
 
+// toggle status selesai/aktif berdasarkan id
 void ubahStatus(int idCari) {
     NodePtr bantu = head;
 
@@ -395,6 +418,7 @@ void ubahStatus(int idCari) {
     cout << endl << "[!] ID tidak ditemukan." << endl;
 }
 
+// simpan seluruh data list ke file biner
 void simpanFile() {
     if (kosongList()) {
         cout << "Tidak ada data untuk disimpan." << endl;
@@ -421,6 +445,7 @@ void simpanFile() {
     cout << "[OK] " << jumlah << " tugas berhasil disimpan." << endl;
 }
 
+// muat data dari file biner ke list, validasi tiap rekaman
 void muatFile() {
     FILE *pf = fopen("tugas_kuliah.dat", "rb");
 
@@ -429,6 +454,7 @@ void muatFile() {
         return;
     }
 
+    // bersihkan list lama sebelum memuat
     while (head != NULL) {
         NodePtr hapus = head;
         head = head->next;
@@ -441,6 +467,7 @@ void muatFile() {
     int jumlah = 0, dilewati = 0;
 
     while (fread(&temp, sizeof(DataTugas), 1, pf) == 1) {
+        // lewati rekaman yang datanya tidak valid
         if (temp.id <= 0 || kosongString(temp.matakuliah) || !validDeadline(temp.deadline)) {
             dilewati++;
             continue;
@@ -464,6 +491,7 @@ void muatFile() {
             bantu->next = baru;
         }
 
+        // sesuaikan idCounter agar tidak bentrok dengan id yang dimuat
         if (temp.id >= idCounter) idCounter = temp.id + 1;
         jumlah++;
     }
@@ -482,12 +510,14 @@ void muatFile() {
     }
 }
 
+// tampilkan seluruh daftar tugas
 void menuLihat() {
     cout << "----- DAFTAR SEMUA TUGAS -----" << endl << endl;
     cetakTugas();
     jedaLayar();
 }
 
+// input data tugas baru lalu tambahkan ke list
 void menuTambah() {
     char mk[30], judulTgs[50], dl[11];
 
@@ -501,6 +531,7 @@ void menuTambah() {
     jedaLayar();
 }
 
+// edit data tugas yang sudah ada berdasarkan id
 void menuUbah() {
     cout << "----- UBAH DATA TUGAS -----" << endl << endl;
 
@@ -555,6 +586,7 @@ void menuUbah() {
     jedaLayar();
 }
 
+// pilih tugas dan konfirmasi sebelum mengubah statusnya
 void menuStatus() {
     cout << "----- UBAH STATUS TUGAS -----" << endl << endl;
 
@@ -595,6 +627,7 @@ void menuStatus() {
     jedaLayar();
 }
 
+// konfirmasi lalu hapus tugas berdasarkan id
 void menuHapus() {
     cout << "----- HAPUS TUGAS -----" << endl << endl;
 
@@ -632,6 +665,7 @@ void menuHapus() {
     jedaLayar();
 }
 
+// input keyword lalu tampilkan hasil pencarian mata kuliah
 void menuCari() {
     cout << "----- CARI TUGAS BERDASARKAN MATA KULIAH -----" << endl << endl;
 
@@ -650,6 +684,7 @@ void menuCari() {
     jedaLayar();
 }
 
+// urutkan list lalu tampilkan hasilnya
 void menuUrut() {
     cout << "----- URUTKAN BERDASARKAN DEADLINE -----" << endl << endl;
 
@@ -658,6 +693,7 @@ void menuUrut() {
     jedaLayar();
 }
 
+// simpan data ke file sebelum keluar
 void menuKeluar() {
     cout << "Menyimpan data..." << endl;
     simpanFile();
@@ -665,6 +701,7 @@ void menuKeluar() {
     jedaLayar();
 }
 
+// muat data, tampilkan menu, dan proses pilihan hingga keluar
 int main() {
     int pilihan;
 
